@@ -1,10 +1,10 @@
+let x, y;
+
 function heatmap(containerId, rawData, colors) {
-  // set the dimensions and margins of the graph
   const margin = { top: 110, right: 25, bottom: 30, left: 60 },
     width = 850 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
-  // append the svg object to the body of the page
   const svg = d3
     .select(containerId)
     .append("svg")
@@ -13,22 +13,10 @@ function heatmap(containerId, rawData, colors) {
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  const data = [];
-  const now = new Date();
-  for (let d = 0; d < 6; d++) {
-    for (let h = 0; h < 24; h++) {
-      data.push({
-        hour: h,
-        // getDay, 0 = sunday, 1 = monday, 2 = tuesday, 3 = wednesday, 4 = thursday, 5 = friday, 6 = saturday
-        day: (now.getDay() + d) % 7,
-        value: rawData[d * 24 + h],
-      });
-    }
-  }
-
+  const data = convertRawData(rawData);
   const hours = Array.from(new Set(data.map((d) => d.hour)));
   const days = Array.from(new Set(data.map((d) => d.day)));
-  const x = d3.scaleBand().range([0, width]).domain(hours).padding(0.0);
+  x = d3.scaleBand().range([0, width]).domain(hours).padding(0.0);
   svg
     .append("g")
     .style("font-size", 15)
@@ -38,11 +26,7 @@ function heatmap(containerId, rawData, colors) {
     .select(".domain")
     .remove();
 
-  const y = d3
-    .scaleBand()
-    .range([height, 0])
-    .domain(days.reverse())
-    .padding(0.0);
+  y = d3.scaleBand().range([height, 0]).domain(days.reverse()).padding(0.0);
   svg
     .append("g")
     .style("font-size", 15)
@@ -66,7 +50,7 @@ function heatmap(containerId, rawData, colors) {
     .select(".domain")
     .remove();
 
-  // add the squares
+  // Cells
   svg
     .selectAll()
     .data(data, function (d) {
@@ -85,8 +69,10 @@ function heatmap(containerId, rawData, colors) {
       return rgbToHex(colors[d.value]);
     })
     .style("stroke-width", 4)
-    .style("stroke", "none");
+    .style("stroke", "none")
+    .attr("class", "cell");
 
+  // Vertical lines
   for (let i = 3; i < 24; i += 3) {
     const xv = i * x.bandwidth();
     svg
@@ -120,6 +106,36 @@ function heatmap(containerId, rawData, colors) {
     .style("fill", "grey")
     .style("max-width", 400)
     .text("Choisissez le meilleur moment pour utiliser l'électricité!");
+}
+
+function update(containerId, rawData, colors) {
+  const data = convertRawData(rawData);
+  const svg = d3.select(containerId);
+  svg
+    .selectAll(".cell")
+    .data(data, function (d) {
+      return d.hour + ":" + d.day;
+    })
+    .transition()
+    .style("fill", function (d) {
+      return rgbToHex(colors[d.value]);
+    });
+}
+
+function convertRawData(rawData) {
+  const data = [];
+  const now = new Date();
+  for (let d = 0; d < 6; d++) {
+    for (let h = 0; h < 24; h++) {
+      data.push({
+        hour: h,
+        // getDay, 0 = sunday, 1 = monday, 2 = tuesday, 3 = wednesday, 4 = thursday, 5 = friday, 6 = saturday
+        day: (now.getDay() + d) % 7,
+        value: rawData[d * 24 + h],
+      });
+    }
+  }
+  return data;
 }
 
 function rgbToHex(values) {
