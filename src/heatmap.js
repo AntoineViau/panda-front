@@ -50,42 +50,35 @@ function heatmap(containerId, rawData, colors) {
     .select(".domain")
     .remove();
 
-  // Cells
-  svg
-    .selectAll()
-    .data(data, function (d) {
-      return d.hour + ":" + d.day;
-    })
-    .join("rect")
-    .attr("x", function (d) {
-      return x(d.hour);
-    })
-    .attr("y", function (d) {
-      return y(d.day);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", y.bandwidth())
-    .style("fill", function (d) {
-      return rgbToHex(colors[d.value]);
-    })
-    .style("stroke-width", 4)
-    .style("stroke", "none")
-    .attr("class", "cell");
-
-  // Vertical lines
-  for (let i = 3; i < 24; i += 3) {
-    const xv = i * x.bandwidth();
-    svg
-      .append("line")
-      .style("stroke-opacity", 0.5)
-      .style("stroke", "black")
-      .style("stroke-width", "1px")
-      .style("width", "8px")
-      .attr("x1", xv)
-      .attr("y1", -20)
-      .attr("x2", xv)
-      .attr("y2", 460);
+  for (let t = 0; t < 4; t++) {
+    setTimeout(
+      () =>
+        cells(
+          svg,
+          data.filter((d) => d.value === t),
+          colors
+        ),
+      500 * t + 500
+    );
   }
+
+  setTimeout(() => {
+    // Vertical lines
+    for (let i = 3; i < 24; i += 3) {
+      const xv = i * x.bandwidth();
+      svg
+        .append("line")
+        .transition()
+        .style("stroke-opacity", 0.5)
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
+        .style("width", "8px")
+        .attr("x1", xv)
+        .attr("y1", -20)
+        .attr("x2", xv)
+        .attr("y2", 400);
+    }
+  }, 2500);
   // Add title to graph
   svg
     .append("text")
@@ -136,6 +129,35 @@ function convertRawData(rawData) {
     }
   }
   return data;
+}
+
+function cells(svg, data, colors) {
+  // Cells
+  svg
+    .selectAll()
+    .data(data, function (d) {
+      return d.hour + ":" + d.day;
+    })
+    .join("rect")
+    .attr("x", function (d) {
+      return x(d.hour);
+    })
+    .attr("y", function (d) {
+      return y(d.day);
+    })
+    .attr("width", x.bandwidth())
+    .attr("height", y.bandwidth())
+    .style("fill", function (d) {
+      return "white";
+    })
+
+    .transition()
+    .style("fill", function (d) {
+      return rgbToHex(colors[d.value]);
+    })
+    .style("stroke-width", 4)
+    .style("stroke", "none")
+    .attr("class", "cell");
 }
 
 function rgbToHex(values) {
