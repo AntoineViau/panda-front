@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <title>PandaMalin</title>
+    <link href="/output.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <script src="stress.js"></script>
+    <script src="malin.js"></script>
+  </head>
+
+  <body>
+    <header class="sticky top-0 z-50">
+      <nav
+        class="w-full h-[70px] md:h-[100px] flex flex-wrap justify-between items-center mx-auto bg-white"
+      >
+        <a href="/" class="ml-3 flex items-center md:hidden">
+          <img
+            src="/assets/img/logo-150x150.png"
+            class="mr-3 h-6 sm:h-9"
+            alt="Logo PandMalin"
+          />
+          <span class="self-center text-xl font-semibold whitespace-nowrap"
+            >PandaMalin</span
+          >
+        </a>
+        <button
+          data-collapse-toggle="#navbar-default"
+          type="button"
+          class="mr-3 inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          aria-controls="navbar-default"
+          aria-expanded="false"
+        >
+          <svg
+            class="w-6 h-6"
+            aria-hidden="true"
+            fill="currentColor"
+            viewbox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+          <ul
+            class="flex flex-col md:items-center p-4 mt-4 bg-gray-50 border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white"
+          >
+            <li class="mb-5 md:mb-0">
+              <a href="" class="text-xl m-0 p-0 uppercase"> Item1 </a>
+            </li>
+            <li class="mb-5 md:mb-0">
+              <a href="" class="text-xl m-0 p-0 uppercase"> Item2 </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <div class="py-3">
+      <section id="malin-section" class="w-full">
+        <h2>Malin</h2>
+        <div id="malin"></div>
+      </section>
+
+      <section id="stress-section">
+        <h2>Stress</h2>
+        <div id="stress"></div>
+      </section>
+    </div>
+
+    <footer class="px-3 py-3 border-t border-gray-400 w-full"></footer>
+  </body>
+</html>
